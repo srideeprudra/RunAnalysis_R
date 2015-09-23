@@ -52,7 +52,7 @@ head(SubjectTrain)
 Train_Data <- cbind(as.data.table(SubjectTrain), yTrain, xTrain)
 head(Train_Data)
 
-##Bind test & training data
+## Bind test & training data
 All_Data <- data.frame(rbind(Test_Data, Train_Data))
 
 ## Extract measurements only for mean & standard deviation for each measurement using "grep"
@@ -62,13 +62,15 @@ head(All_Data)
 
 library(reshape2)
 
+## Restructure data using melt
 data_labels = setdiff(colnames(All_Data), c("subject", "Activity_ID", "Activity_Label"))
 melt_data = melt(All_Data, 
                       c("subject", "Activity_ID", "Activity_Label"), 
                         measure.vars = data_labels)
 
-# Apply mean function to dataset using dcast function
+## Apply mean function to dataset using dcast function
 TidyData_wAverage   = dcast(melt_data, subject + Activity_Label ~ variable, mean)
 head(TidyData_wAverage)
 
+## Write final text file
 write.table(TidyData_wAverage, file = "./TidyData_wAverage.txt")
